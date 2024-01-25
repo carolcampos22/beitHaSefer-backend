@@ -12,7 +12,7 @@ API Rest do site da Beit HaSefer, que tem por finalidade ensinar sobre a Torá e
 ### Próximos passos
 - CRUD
 - Banco de dados
-- Validaçãoes
+- Validações
 - Segurança
 - Testes unitários
 
