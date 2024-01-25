@@ -17,3 +17,7 @@ Projeto em desenvolvimento.
 - Banco de dados
 - Segurança
 - Testes unitários
+
+### Autores
+#### Carolina Mendes - Backend
+#### Valtecir Aragão - Frontend
