@@ -1,5 +1,5 @@
 # Beit HaSefer
-API Rest do site da Beit HaSefer, que tem por finalidade ensinar sobre a Torá e a Kabbalah. Projeto emdesenvolvimento.
+API Rest do site da Beit HaSefer, que tem por finalidade ensinar sobre a Torá e a Kabbalah. Projeto em desenvolvimento.
 
 ### Tecnologias utilizadas
 - TypeScript
