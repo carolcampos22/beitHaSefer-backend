@@ -1,18 +1,27 @@
-import { Body, Controller, Delete, Get, Patch, Post, UseInterceptors } from "@nestjs/common";
+import { Body, Controller, Delete, Get, Patch, Post, UseGuards, UseInterceptors } from "@nestjs/common";
 import { CreateUserDTO } from "./dto/create-user.dto";
 import { UpdateUserDTO } from "./dto/update-user.dto";
 import { UserService } from "./user.service";
 import { LogInterceptor } from "src/interceptors/log.interceptor";
 import { ParamId } from "src/decorators/param-id.decorator";
+import { Roles } from "src/decorators/roles.decorator";
+import { Role } from "src/enums/role.enum";
+import { RoleGuard } from "src/guards/role.guard";
+import { AuthGuard } from "src/guards/auth.guard";
 
+
+//@UseInterceptors(LogInterceptor) //está definido na função bootstrap
+@Roles(Role.Admin)
+@UseGuards( AuthGuard, RoleGuard)
 @Controller('users')
 export class UserController {
+
     constructor(private readonly userService: UserService){}
 
-    //@UseInterceptors(LogInterceptor)
+    
     @Post()
-    async create(@Body() {name, email, password, phone}: CreateUserDTO){
-        return this.userService.create({ name, email, password, phone })
+    async create(@Body() {name, email, password, phone, role}: CreateUserDTO){
+        return this.userService.create({ name, email, password, phone, role })
     }
 
     @Get()
