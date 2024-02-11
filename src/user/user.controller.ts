@@ -2,7 +2,6 @@ import { Body, Controller, Delete, Get, Patch, Post, UseGuards, UseInterceptors 
 import { CreateUserDTO } from "./dto/create-user.dto";
 import { UpdateUserDTO } from "./dto/update-user.dto";
 import { UserService } from "./user.service";
-import { LogInterceptor } from "src/interceptors/log.interceptor";
 import { ParamId } from "src/decorators/param-id.decorator";
 import { Roles } from "src/decorators/roles.decorator";
 import { Role } from "src/enums/role.enum";
