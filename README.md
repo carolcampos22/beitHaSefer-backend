@@ -6,11 +6,11 @@ API Rest do site da Beit HaSefer, que tem por finalidade ensinar sobre a Torá e
 - Node.js
 - NestJS
 - MySQL
-- Prisma
+- TypeORM
 - Jest
 
 ### Próximos passos
-- Banco de dados
+- Banco de dados - Produtos
 - Validações
 - Segurança
 - Testes unitários
