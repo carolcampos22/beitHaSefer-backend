@@ -2,14 +2,16 @@ import { Body, Controller, Delete, Get, Patch, Post, UseGuards, UseInterceptors 
 import { CreateUserDTO } from "./dto/create-user.dto";
 import { UpdateUserDTO } from "./dto/update-user.dto";
 import { UserService } from "./user.service";
-import { ParamId } from "src/decorators/param-id.decorator";
-import { Roles } from "src/decorators/roles.decorator";
-import { Role } from "src/enums/role.enum";
-import { RoleGuard } from "src/guards/role.guard";
-import { AuthGuard } from "src/guards/auth.guard";
+import { Roles } from "../decorators/roles.decorator";
+import { Role } from "../enums/role.enum";
+import { AuthGuard } from "../guards/auth.guard";
+import { RoleGuard } from "../guards/role.guard";
+import { ParamId } from "../decorators/param-id.decorator";
+import { LogInterceptor } from "../interceptors/log.interceptor";
 
 
-//@UseInterceptors(LogInterceptor) //está definido na função bootstrap
+
+@UseInterceptors(LogInterceptor)
 @Roles(Role.Admin)
 @UseGuards( AuthGuard, RoleGuard)
 @Controller('users')
@@ -43,7 +45,9 @@ export class UserController {
     @Delete(':id')
     async delete(@ParamId() id: number) {
         await this.userService.exists(id)
-        return this.userService.delete(id)
+        return {
+            success: await this.userService.delete(id)
+        }
     }
 
     
