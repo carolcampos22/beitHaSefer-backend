@@ -8,12 +8,13 @@ API Rest do site da Beit HaSefer, que tem por finalidade ensinar sobre a Torá e
 - MySQL
 - TypeORM
 - Jest
+- Pug
 
 ### Próximos passos
 - Banco de dados - Produtos
 - Validações
 - Segurança
-- Testes unitários
+- Testes unitários - Produtos
 
 ### Autora
 #### Carolina Mendes - Backend
