@@ -1,91 +1,120 @@
-import { BadRequestException, Body, Controller, FileTypeValidator, MaxFileSizeValidator, ParseFilePipe, Post, Req, Request, UploadedFile, UploadedFiles, UseGuards, UseInterceptors } from "@nestjs/common";
-import { AuthLoginDTO } from "./dto/auth-login.dto";
-import { AuthRegisterDTO } from "./dto/auth-register.dto";
-import { AuthForgetDTO } from "./dto/auth-forget.dto";
-import { AuthResetDTO } from "./dto/auth-reset.dto";
-import { AuthService } from "./auth.service";
-import { FileFieldsInterceptor, FileInterceptor, FilesInterceptor } from "@nestjs/platform-express";
-import { FileService } from "../file/file.service";
-import { AuthGuard } from "../guards/auth.guard";
-import { User } from "../decorators/user.decorator";
-import { UserEntity } from "../user/entity/user.entity";
-
+import {
+  BadRequestException,
+  Body,
+  Controller,
+  FileTypeValidator,
+  MaxFileSizeValidator,
+  ParseFilePipe,
+  Post,
+  UploadedFile,
+  UploadedFiles,
+  UseGuards,
+  UseInterceptors,
+} from '@nestjs/common';
+import { AuthLoginDTO } from './dto/auth-login.dto';
+import { AuthRegisterDTO } from './dto/auth-register.dto';
+import { AuthForgetDTO } from './dto/auth-forget.dto';
+import { AuthResetDTO } from './dto/auth-reset.dto';
+import { AuthService } from './auth.service';
+import {
+  FileFieldsInterceptor,
+  FileInterceptor,
+  FilesInterceptor,
+} from '@nestjs/platform-express';
+import { FileService } from '../file/file.service';
+import { AuthGuard } from '../guards/auth.guard';
+import { User } from '../decorators/user.decorator';
+import { UserEntity } from '../user/entity/user.entity';
 
 @Controller('auth')
 export class AuthController {
+  constructor(
+    private readonly authService: AuthService,
+    private readonly fileService: FileService,
+  ) {}
 
-    constructor(
-        private readonly authService: AuthService,
-        private readonly fileService: FileService
-    ) { }
+  @Post('login')
+  async login(@Body() { email, password }: AuthLoginDTO) {
+    return this.authService.login(email, password);
+  }
 
-    @Post('login')
-    async login(@Body() { email, password }: AuthLoginDTO) {
-        return this.authService.login(email, password)
-    }
+  @Post('register')
+  async register(@Body() body: AuthRegisterDTO) {
+    return this.authService.register(body);
+  }
 
-    @Post('register')
-    async register(@Body() body: AuthRegisterDTO) {
-        return this.authService.register(body)
-    }
+  @Post('forget')
+  async forget(@Body() { email }: AuthForgetDTO) {
+    return this.authService.forget(email);
+  }
 
-    @Post('forget')
-    async forget(@Body() { email }: AuthForgetDTO) {
-        return this.authService.forget(email)
-    }
+  @Post('reset')
+  async reset(@Body() { password, token }: AuthResetDTO) {
+    await this.authService.reset(password, token);
 
-    @Post('reset')
-    async reset(@Body() { password, token }: AuthResetDTO) {
-        await this.authService.reset(password, token)
+    return { success: true };
+  }
 
-        return {success: true}
-    }
+  @UseGuards(AuthGuard)
+  @Post('me')
+  async me(@User() user: UserEntity) {
+    return user;
+  }
 
-    @UseGuards(AuthGuard)
-    @Post('me')
-    async me(@User() user: UserEntity) {
-        return user
-    }
-
-    @UseInterceptors(FileInterceptor('file'))
-    @UseGuards(AuthGuard)
-    @Post('photo')
-    async uploadPhoto(@User() user: UserEntity, @UploadedFile(new ParseFilePipe({
+  @UseInterceptors(FileInterceptor('file'))
+  @UseGuards(AuthGuard)
+  @Post('photo')
+  async uploadPhoto(
+    @User() user: UserEntity,
+    @UploadedFile(
+      new ParseFilePipe({
         validators: [
-            new FileTypeValidator({fileType: 'image/*'}),
-            new MaxFileSizeValidator({maxSize: 1024 * 80})
-        ]
-    })) photo: Express.Multer.File) {
+          new FileTypeValidator({ fileType: 'image/*' }),
+          new MaxFileSizeValidator({ maxSize: 1024 * 80 }),
+        ],
+      }),
+    )
+    photo: Express.Multer.File,
+  ) {
+    const filename = `photo-${user.id}.png`;
 
-        const filename = `photo-${user.id}.png`
-
-        try {
-            await this.fileService.upload(photo, filename)
-        } catch (e) {
-            throw new BadRequestException(e)
-        }
-        return photo
+    try {
+      await this.fileService.upload(photo, filename);
+    } catch (e) {
+      throw new BadRequestException(e);
     }
+    return photo;
+  }
 
-    @UseInterceptors(FilesInterceptor('files'))
-    @UseGuards(AuthGuard)
-    @Post('files')
-    async uploadFiles(@User() user, @UploadedFiles() files: Express.Multer.File[]) {
+  @UseInterceptors(FilesInterceptor('files'))
+  @UseGuards(AuthGuard)
+  @Post('files')
+  async uploadFiles(
+    @User() user,
+    @UploadedFiles() files: Express.Multer.File[],
+  ) {
+    return files;
+  }
 
-        return files
-    }
-
-    @UseInterceptors(FileFieldsInterceptor([{
+  @UseInterceptors(
+    FileFieldsInterceptor([
+      {
         name: 'photo',
-        maxCount: 1
-    }, {
+        maxCount: 1,
+      },
+      {
         name: 'documents',
-        maxCount: 10
-    }]))
-    @UseGuards(AuthGuard)
-    @Post('files-field')
-    async uploadFilesFields(@User() user, @UploadedFiles() files: {photo: Express.Multer.File, documents: Express.Multer.File[]}) {
-
-        return files
-    }
+        maxCount: 10,
+      },
+    ]),
+  )
+  @UseGuards(AuthGuard)
+  @Post('files-field')
+  async uploadFilesFields(
+    @User() user,
+    @UploadedFiles()
+    files: { photo: Express.Multer.File; documents: Express.Multer.File[] },
+  ) {
+    return files;
+  }
 }
