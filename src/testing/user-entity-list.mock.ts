@@ -1,30 +1,29 @@
-import { Role } from "../enums/role.enum"
-import { UserEntity } from "../user/entity/user.entity"
+import { Role } from '../enums/role.enum';
+import { UserEntity } from '../user/entity/user.entity';
 
 export const userEntityList: UserEntity[] = [
-    {
-        name: "Jonh Doe",
-        email: "jd@email.com",
-        password: "$2b$10$prM5F0d3orRNZH7UXCM3LeMKhAtVevvPHr4q4/b4H4onN35DfM3Ha",
-        phone: "5550001",
-        role: Role.User
-    }, {
-
-        name: "Teste",
-        email: "teste@email.com",
-        password: "$2b$10$2tfzG9QWstGsw2rDUxaT3.0YMzZOPVrZTAGVuIrZZP56CmrJmLtIO",
-        phone: "5550001",
-        role: Role.User
-    }, {
-        name: 'Joao',
-        email: 'joão@email.com',
-        password: "$2b$10$MQ6kVtYtsILAJbBT54/GCuizlESEDp6DmP2j.8oGCdP/0cCfKhx6K",
-        phone: "5550147",
-        role: Role.User
-    }
-
-]
-
+  {
+    name: 'Jonh Doe',
+    email: 'jd@email.com',
+    password: '$2b$10$prM5F0d3orRNZH7UXCM3LeMKhAtVevvPHr4q4/b4H4onN35DfM3Ha',
+    phone: '5550001',
+    role: Role.User,
+  },
+  {
+    name: 'Teste',
+    email: 'teste@email.com',
+    password: '$2b$10$2tfzG9QWstGsw2rDUxaT3.0YMzZOPVrZTAGVuIrZZP56CmrJmLtIO',
+    phone: '5550001',
+    role: Role.User,
+  },
+  {
+    name: 'Joao',
+    email: 'joão@email.com',
+    password: '$2b$10$MQ6kVtYtsILAJbBT54/GCuizlESEDp6DmP2j.8oGCdP/0cCfKhx6K',
+    phone: '5550147',
+    role: Role.User,
+  },
+];
 
 /**[
     {

@@ -1,78 +1,74 @@
-import { Test, TestingModule } from "@nestjs/testing"
-import { AuthGuard } from "../guards/auth.guard"
-import { guardMock } from "../testing/guard.mock"
-import { AuthController } from "./auth.controller"
-import { authServiceMock } from "../testing/auth-service.mock"
-import { fileServiceMock } from "../testing/file-service.mock"
-import { authLoginDTO } from "../testing/auth-login-dto.mock"
-import { accessToken } from "../testing/access-token.mock"
-import { authRegisterDTO } from "../testing/auth-register-dto.mock"
-import { authForgetDTO } from "../testing/auth-forget-dto.mock"
-import { authResetDTO } from "../testing/auth-reset-dto.mock"
-import { userEntityList } from "../testing/user-entity-list.mock"
-import { getPhoto } from "../testing/get-photo.mock"
-
+import { Test, TestingModule } from '@nestjs/testing';
+import { AuthGuard } from '../guards/auth.guard';
+import { guardMock } from '../testing/guard.mock';
+import { AuthController } from './auth.controller';
+import { authServiceMock } from '../testing/auth-service.mock';
+import { fileServiceMock } from '../testing/file-service.mock';
+import { authLoginDTO } from '../testing/auth-login-dto.mock';
+import { accessToken } from '../testing/access-token.mock';
+import { authRegisterDTO } from '../testing/auth-register-dto.mock';
+import { authForgetDTO } from '../testing/auth-forget-dto.mock';
+import { authResetDTO } from '../testing/auth-reset-dto.mock';
+import { userEntityList } from '../testing/user-entity-list.mock';
+import { getPhoto } from '../testing/get-photo.mock';
 
 describe('UserController', () => {
+  let authController: AuthController;
 
-    let authController: AuthController
-
-    beforeEach(async () => {
-
-        const module: TestingModule = await Test.createTestingModule({
-            controllers: [AuthController],
-            providers: [authServiceMock, fileServiceMock]
-        })
-            .overrideGuard(AuthGuard)
-            .useValue(guardMock)
-            .compile()
-
-            authController = module.get<AuthController>(AuthController)
+  beforeEach(async () => {
+    const module: TestingModule = await Test.createTestingModule({
+      controllers: [AuthController],
+      providers: [authServiceMock, fileServiceMock],
     })
+      .overrideGuard(AuthGuard)
+      .useValue(guardMock)
+      .compile();
 
-    test('Validar a definição', () => {
-        expect(authController).toBeDefined();       
-    })
+    authController = module.get<AuthController>(AuthController);
+  });
 
-    describe('Fluxo de autenticação', () => {
-        test('login method', async () => {
-            const result = await authController.login(authLoginDTO)
+  test('Validar a definição', () => {
+    expect(authController).toBeDefined();
+  });
 
-            expect(result).toEqual({accessToken: accessToken})
-        })
+  describe('Fluxo de autenticação', () => {
+    test('login method', async () => {
+      const result = await authController.login(authLoginDTO);
 
-        test('register method', async () => {
-            const result = await authController.register(authRegisterDTO)
+      expect(result).toEqual({ accessToken: accessToken });
+    });
 
-            expect(result).toEqual({accessToken: accessToken})
-        })
+    test('register method', async () => {
+      const result = await authController.register(authRegisterDTO);
 
-        test('forget method', async () => {
-            const result = await authController.forget(authForgetDTO)
+      expect(result).toEqual({ accessToken: accessToken });
+    });
 
-            expect(result).toEqual({success: true})
-        })
+    test('forget method', async () => {
+      const result = await authController.forget(authForgetDTO);
 
-        test('reset method', async () => {
-            const result = await authController.reset(authResetDTO)
+      expect(result).toEqual({ success: true });
+    });
 
-            expect(result).toEqual({success: true})
-        })
-    })
+    test('reset method', async () => {
+      const result = await authController.reset(authResetDTO);
 
-    describe('Rotas autenticadas', () => {
-        test('me method', async () => {
-            const result = await authController.me(userEntityList[0])
+      expect(result).toEqual({ success: true });
+    });
+  });
 
-            expect(result).toEqual(userEntityList[0])
-        })
+  describe('Rotas autenticadas', () => {
+    test('me method', async () => {
+      const result = await authController.me(userEntityList[0]);
 
-        test('uploadPhoto method', async () => {
-            const photo = await getPhoto()
-            const result = await authController.uploadPhoto(userEntityList[0], photo)
+      expect(result).toEqual(userEntityList[0]);
+    });
 
-            expect(result).toEqual(photo)
-        })
-    })
+    test('uploadPhoto method', async () => {
+      const photo = await getPhoto();
+      const result = await authController.uploadPhoto(userEntityList[0], photo);
 
-})
+      expect(result).toEqual(photo);
+    });
+  });
+});

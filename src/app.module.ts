@@ -11,14 +11,17 @@ import { PugAdapter } from '@nestjs-modules/mailer/dist/adapters/pug.adapter';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { UserEntity } from './user/entity/user.entity';
 
-
 @Module({
   imports: [
-    ConfigModule.forRoot(),
-    ThrottlerModule.forRoot([{
-      ttl: 60000,
-      limit: 100
-    }]),
+    ConfigModule.forRoot({
+      envFilePath: process.env.ENV === 'test' ? '.env.test' : '.env',
+    }),
+    ThrottlerModule.forRoot([
+      {
+        ttl: 60000,
+        limit: 100,
+      },
+    ]),
     forwardRef(() => UserModule),
     forwardRef(() => AuthModule),
     MailerModule.forRoot({
@@ -27,8 +30,8 @@ import { UserEntity } from './user/entity/user.entity';
         port: 587,
         auth: {
           user: 'stephanie.sporer94@ethereal.email',
-          pass: '1YgaYVvWHSrrp53uex'
-        }
+          pass: '1YgaYVvWHSrrp53uex',
+        },
       },
       defaults: {
         from: '"Dev Carol" <hester.howe@ethereal.email>',
@@ -49,14 +52,17 @@ import { UserEntity } from './user/entity/user.entity';
       password: process.env.DB_PASSWORD,
       database: process.env.DB_DATABASE,
       entities: [UserEntity],
-      synchronize: process.env.ENV === "development"
-    })
+      synchronize: process.env.ENV === 'development',
+    }),
   ],
   controllers: [AppController],
-  providers: [AppService, {
-    provide: APP_GUARD,
-    useClass: ThrottlerGuard
-  }],
-  exports: [AppService]
+  providers: [
+    AppService,
+    {
+      provide: APP_GUARD,
+      useClass: ThrottlerGuard,
+    },
+  ],
+  exports: [AppService],
 })
-export class AppModule { }
+export class AppModule {}
