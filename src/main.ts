@@ -12,3 +12,6 @@ async function bootstrap() {
   await app.listen(3000);
 }
 bootstrap();
+
+//deploy no Render:
+//https://www.youtube.com/watch?v=3i4pc3iWjqQ
