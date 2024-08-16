@@ -13,5 +13,4 @@ async function bootstrap() {
 }
 bootstrap();
 
-//deploy no Render:
-//https://www.youtube.com/watch?v=3i4pc3iWjqQ
+

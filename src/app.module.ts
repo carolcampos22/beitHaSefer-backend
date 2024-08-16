@@ -10,9 +10,11 @@ import { MailerModule } from '@nestjs-modules/mailer';
 import { PugAdapter } from '@nestjs-modules/mailer/dist/adapters/pug.adapter';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { UserEntity } from './user/entity/user.entity';
+import { ProductModule } from './product/product.module';
 
 @Module({
   imports: [
+    ProductModule,
     ConfigModule.forRoot({
       envFilePath: process.env.ENV === 'test' ? '.env.test' : '.env',
     }),
@@ -34,7 +36,7 @@ import { UserEntity } from './user/entity/user.entity';
         },
       },
       defaults: {
-        from: '"Dev Carol" <hester.howe@ethereal.email>',
+        from: '"Carolina" <hester.howe@ethereal.email>',
       },
       template: {
         dir: __dirname + '/templates',
