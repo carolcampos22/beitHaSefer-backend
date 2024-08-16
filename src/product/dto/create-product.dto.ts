@@ -1,16 +1,24 @@
-import { IsArray, IsEnum, IsString } from "class-validator";
+import { IsArray, IsEnum, IsNumber, IsOptional, IsString } from "class-validator";
 import { ProductType } from "../../enums/product-type.enum";
 
 export class CreateProductDTO {
-    @IsString()
-    name: string
+  @IsString()
+  title: string;
 
-    @IsArray()
-    authors: string[]
+  @IsString()
+  description: string;
 
-    @IsEnum(ProductType)
-    type: number
+  @IsArray()
+  @IsString({ each: true })
+  authors: string[];
 
-    
+  @IsNumber({ allowNaN: false, maxDecimalPlaces: 2 })
+  price: number;
 
+  @IsEnum(ProductType)
+  type: ProductType;
+
+  @IsString()
+  @IsOptional()
+  fileUrl?: string;
 }
